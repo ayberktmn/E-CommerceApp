@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ayberk.e_commerceapp.R
+import com.ayberk.e_commerceapp.data.model.Products
 import com.ayberk.e_commerceapp.databinding.ItemProductsBinding
-import com.ayberk.e_commerceapp.data.model.products
 import com.bumptech.glide.Glide
 
-class adapter : RecyclerView.Adapter<adapter.RocketViewHolder>() {
+class ProductsAdapter : RecyclerView.Adapter<ProductsAdapter.RocketViewHolder>() {
 
-    private var productsList: List<products> = emptyList()
+    private var productsList: List<Products> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RocketViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -29,7 +29,7 @@ class adapter : RecyclerView.Adapter<adapter.RocketViewHolder>() {
     inner class RocketViewHolder(private val binding: ItemProductsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(product: products) {
+        fun bind(product: Products) {
             binding.apply {
                 txtProductTitle.text = product.title
                 txtProductPrice.text = product.price.toString()
@@ -50,7 +50,7 @@ class adapter : RecyclerView.Adapter<adapter.RocketViewHolder>() {
         }
     }
 
-    fun setProductsList(newList: List<products>) {
+    fun setProductsList(newList: List<Products>) {
         productsList = newList
         notifyDataSetChanged()
     }

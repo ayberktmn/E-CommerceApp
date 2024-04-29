@@ -1,6 +1,7 @@
 package com.ayberk.e_commerceapp.di.module
 
 import com.ayberk.e_commerceapp.common.Constans.BASE_URL
+import com.ayberk.e_commerceapp.domain.retrofit.Authenticator
 import com.ayberk.e_commerceapp.domain.retrofit.RetrofitServiceIns
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -8,10 +9,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
+import kotlin.coroutines.CoroutineContext
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -52,4 +56,16 @@ class AppModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
+
+
+    @Provides
+    @Singleton
+    fun provideAuthenticator(): Authenticator {
+        return AuthClass()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCoroutineContext(): CoroutineContext = Dispatchers.IO
+
 }

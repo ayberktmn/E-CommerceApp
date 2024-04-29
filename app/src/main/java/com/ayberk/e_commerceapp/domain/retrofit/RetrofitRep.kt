@@ -1,13 +1,13 @@
 package com.ayberk.e_commerceapp.domain.retrofit
 
 import com.ayberk.e_commerceapp.common.Resource
-import com.ayberk.e_commerceapp.data.model.products
+import com.ayberk.e_commerceapp.data.model.Products
 import javax.inject.Inject
 
 class RetrofitRep @Inject constructor(
     private val retrofitServiceInstance: RetrofitServiceIns
 ) {
-    suspend fun getProducts(): Resource<List<products>> {
+    suspend fun getProducts(): Resource<List<Products>> {
         return try {
             val response = retrofitServiceInstance.getProducts()
             if (response.isSuccessful) {
@@ -20,4 +20,5 @@ class RetrofitRep @Inject constructor(
             Resource.Error(e.message.toString())
         }
     }
+
 }
