@@ -46,7 +46,6 @@ class HomeFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             isBackPressed = true
         }
-
         return binding.root
     }
 
@@ -59,6 +58,7 @@ class HomeFragment : Fragment() {
                     when (it) {
                         is Resource.Success -> {
                             txtName.text = it.data.email
+                            txtName.text = it.data.emailRegister
                         }
 
                         is Resource.Error -> {
@@ -87,7 +87,7 @@ class HomeFragment : Fragment() {
                                 offscreenPageLimit = 3
                                 getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
                                 setPageTransformer(compositePageTransformer)
-                                currentItem = 2
+                                currentItem = 1
                             }
                         }
 
@@ -125,21 +125,4 @@ class HomeFragment : Fragment() {
 
         binding.rcrylerProducts.adapter = productsAdapter
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-private fun initObservers() {
-
 }

@@ -17,6 +17,8 @@ interface Authenticator {
 
     suspend fun getCurrentUser(): User
 
+    suspend fun getSignedUpUserEmail(): String
+
     suspend fun signOut()
 
 }

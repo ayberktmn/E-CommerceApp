@@ -9,7 +9,6 @@ class GetCurrentUserUseCase @Inject constructor(
     private val authenticator: Authenticator
 ) {
     suspend operator fun invoke(): Resource<User> {
-
         return try {
             Resource.Loading
             Resource.Success(authenticator.getCurrentUser())

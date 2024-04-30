@@ -41,6 +41,19 @@ class AuthClass : Authenticator {
         return User(currentUser?.displayName ?: "", currentUser?.email ?: "")
     }
 
+    override suspend fun getSignedUpUserEmail(): String {
+        // Firebase Authentication'tan kullanıcıyı alın
+        val currentUser = firebaseAuth.currentUser
+
+        // Kullanıcı varsa ve e-posta adresiyle kayıt olmuşsa, e-posta adresini döndürün
+        return if (currentUser != null && currentUser.email != null) {
+            currentUser.email!!
+        } else {
+            // Kullanıcı yoksa veya e-posta adresi kayıtlı değilse boş bir dize döndürün
+            ""
+        }
+    }
+
     override suspend fun signOut() {
         // Kullanıcıyı çıkış yapmak için gerekli işlemleri gerçekleştirin
         firebaseAuth.signOut()
