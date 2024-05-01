@@ -84,8 +84,8 @@ class HomeFragment : Fragment() {
                                 adapter = saleProductsAdapter
                                 clipToPadding = false
                                 clipChildren = false
-                                offscreenPageLimit = 3
-                                getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+                                viewpagerSale.offscreenPageLimit = 3
+                                viewpagerSale.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
                                 setPageTransformer(compositePageTransformer)
                                 currentItem = 1
                             }

@@ -5,14 +5,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="193dp"
-        android:layout_height="324dp"
-        android:layout_margin="16dp"
-        android:background="@drawable/rounded_background"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:id="@+id/linearProduct"
         android:layout_width="wrap_content"
@@ -31,8 +23,8 @@
             android:id="@+id/cardProducts"
             android:layout_width="174dp"
             android:layout_height="189dp"
-            app:cardCornerRadius="16dp"
-            app:cardBackgroundColor="@android:color/white"> <!-- Arkaplan rengi beyaz -->
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="16dp"> <!-- Arkaplan rengi beyaz -->
 
             <ImageView
                 android:id="@+id/imgProduct"
