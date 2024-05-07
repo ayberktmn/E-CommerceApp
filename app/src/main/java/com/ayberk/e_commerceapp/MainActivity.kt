@@ -46,6 +46,10 @@ class MainActivity : AppCompatActivity() {
                                 navController.navigate(R.id.profileFragment)
                                 true
                             }
+                            R.id.home -> {
+                                navController.navigate(R.id.homeFragment)
+                                true
+                            }
                             else -> false
                         }
                     }

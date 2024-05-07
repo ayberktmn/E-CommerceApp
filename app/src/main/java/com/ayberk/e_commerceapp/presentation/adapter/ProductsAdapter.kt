@@ -36,7 +36,7 @@ class ProductsAdapter : RecyclerView.Adapter<ProductsAdapter.RocketViewHolder>()
 
                  Glide.with(imgProduct.context)
                      .load(product.imageOne)
-                     .error(R.drawable.ic_launcher_background)
+                     .error(R.drawable.mavilogo)
                      .centerCrop()
                      .into(imgProduct)
 

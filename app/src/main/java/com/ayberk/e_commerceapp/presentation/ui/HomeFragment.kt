@@ -19,6 +19,7 @@ import com.ayberk.e_commerceapp.databinding.FragmentHomeBinding
 import com.ayberk.e_commerceapp.presentation.adapter.ProductsAdapter
 import com.ayberk.e_commerceapp.presentation.adapter.SaleProductsAdapter
 import com.ayberk.e_commerceapp.presentation.viewmodel.ProductsViewModel
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
 
@@ -40,13 +41,19 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        initObservers()
-        productViewModel.getProducts()
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             isBackPressed = true
         }
+
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initObservers()
+        productViewModel.getProducts()
+
     }
 
     private fun initObservers() {
@@ -62,7 +69,6 @@ class HomeFragment : Fragment() {
                         }
 
                         is Resource.Error -> {
-
                             requireView().showSnackbar(it.throwable.toString())
                         }
 
@@ -84,7 +90,7 @@ class HomeFragment : Fragment() {
                                 adapter = saleProductsAdapter
                                 clipToPadding = false
                                 clipChildren = false
-                                viewpagerSale.offscreenPageLimit = 3
+                                offscreenPageLimit = 3
                                 viewpagerSale.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
                                 setPageTransformer(compositePageTransformer)
                                 currentItem = 1
@@ -98,14 +104,12 @@ class HomeFragment : Fragment() {
                         else -> {}
                     }
                 }
-
             }
         }
 
         productViewModel.productState.observe(requireActivity(), Observer { state ->
-            state.productsList?.let { productsList ->
+            state.productsList.let { productsList ->
                 if (productsList.isNotEmpty()) {
-                    Toast.makeText(requireContext(), "Ürünler Yükleniyor", Toast.LENGTH_SHORT).show()
                     setupRecyclerView(productsList)
                 } else {
                     println("Ürün listesi boş veya null.")
@@ -124,5 +128,10 @@ class HomeFragment : Fragment() {
         productsAdapter.setProductsList(productsList)
 
         binding.rcrylerProducts.adapter = productsAdapter
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.root
     }
 }

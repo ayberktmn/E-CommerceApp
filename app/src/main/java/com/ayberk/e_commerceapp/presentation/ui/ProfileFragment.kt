@@ -1,60 +1,103 @@
 package com.ayberk.e_commerceapp.presentation.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.fragment.app.viewModels
 import com.ayberk.e_commerceapp.R
+import com.ayberk.e_commerceapp.common.Resource
+import com.ayberk.e_commerceapp.common.showSnackbar
+import com.ayberk.e_commerceapp.databinding.FragmentHomeBinding
+import com.ayberk.e_commerceapp.databinding.FragmentProfileBinding
+import com.ayberk.e_commerceapp.presentation.viewmodel.ProductsViewModel
+import com.ayberk.e_commerceapp.presentation.viewmodel.ProfileViewModel
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentProfileBinding
+    private val productViewModel: ProductsViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.txtPasswordChange.setOnClickListener {
+            showChangePasswordDialog()
+        }
+
+        with(binding) {
+            with(productViewModel) {
+
+                user.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is Resource.Success -> {
+                            txtProfileEmail.text = it.data.email
+                            txtProfileEmail.text = it.data.emailRegister
+                        }
+
+                        is Resource.Error -> {
+                            requireView().showSnackbar(it.throwable.toString())
+                        }
+
+                        else -> {}
+                    }
                 }
             }
+        }
+    }
+
+    private fun showChangePasswordDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.passwordchange, null)
+
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+
+        val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
+        val dialogTitle = "Şifre Değişikliği : "
+
+        alertDialogBuilder.setView(dialogView)
+        alertDialogBuilder.setTitle(dialogTitle + currentUserEmail)
+
+        val alertDialog = alertDialogBuilder.create()
+
+        dialogView.findViewById<View>(R.id.todoNextBtn).setOnClickListener {
+            val currentPassword = dialogView.findViewById<TextInputEditText>(R.id.PasswordChange1).text.toString()
+            val newPassword = dialogView.findViewById<TextInputEditText>(R.id.PasswordChange).text.toString()
+
+            if (currentPassword.isBlank() || newPassword.isBlank()) {
+                requireView().showSnackbar("Lütfen şifre giriniz")
+                return@setOnClickListener
+            }
+
+            profileViewModel.changePassword(currentPassword, newPassword) { isSuccess, message ->
+                if (isSuccess) {
+                    requireView().showSnackbar(message ?: "Şifre Başarıyla Güncellendi")
+                } else {
+                    requireView().showSnackbar(message ?: "Şifre Güncellemesi Başarısız")
+                }
+                alertDialog.dismiss()
+            }
+        }
+
+        alertDialog.show()
     }
 }

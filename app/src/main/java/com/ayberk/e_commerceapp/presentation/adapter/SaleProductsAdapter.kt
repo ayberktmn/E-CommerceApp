@@ -3,6 +3,7 @@ package com.ayberk.e_commerceapp.presentation.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ayberk.e_commerceapp.R
 import com.ayberk.e_commerceapp.data.model.Products
 import com.ayberk.e_commerceapp.databinding.ItemSaleproductBinding
 import com.bumptech.glide.Glide
@@ -10,8 +11,6 @@ import com.bumptech.glide.Glide
 class SaleProductsAdapter : RecyclerView.Adapter<SaleProductsAdapter.ProductsViewHolder>() {
 
     private val list = ArrayList<Products>()
-
-    var onProductClick: (Products) -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsViewHolder =
         ProductsViewHolder(
@@ -32,16 +31,12 @@ class SaleProductsAdapter : RecyclerView.Adapter<SaleProductsAdapter.ProductsVie
 
                 product = item
 
-                Glide.with(itemView.context)
+                Glide.with(imgProduct.context)
                     .load(item.imageOne)
+                    .error(R.drawable.mavilogo)
                     .centerCrop()
                     .into(imgProduct)
-
-                imgProduct.setOnClickListener {
-                    onProductClick(item)
-                }
             }
-
         }
     }
 
