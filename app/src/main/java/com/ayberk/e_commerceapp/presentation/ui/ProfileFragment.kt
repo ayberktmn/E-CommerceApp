@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.ayberk.e_commerceapp.R
 import com.ayberk.e_commerceapp.common.Resource
 import com.ayberk.e_commerceapp.common.showSnackbar
@@ -16,6 +18,9 @@ import com.ayberk.e_commerceapp.databinding.FragmentHomeBinding
 import com.ayberk.e_commerceapp.databinding.FragmentProfileBinding
 import com.ayberk.e_commerceapp.presentation.viewmodel.ProductsViewModel
 import com.ayberk.e_commerceapp.presentation.viewmodel.ProfileViewModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,8 +31,6 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private val productViewModel: ProductsViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +47,8 @@ class ProfileFragment : Fragment() {
         binding.txtPasswordChange.setOnClickListener {
             showChangePasswordDialog()
         }
+        photoGmailUser()
+        signOut()
 
         with(binding) {
             with(productViewModel) {
@@ -72,10 +77,9 @@ class ProfileFragment : Fragment() {
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
 
         val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
-        val dialogTitle = "Şifre Değişikliği : "
 
         alertDialogBuilder.setView(dialogView)
-        alertDialogBuilder.setTitle(dialogTitle + currentUserEmail)
+        alertDialogBuilder.setTitle(currentUserEmail)
 
         val alertDialog = alertDialogBuilder.create()
 
@@ -99,5 +103,30 @@ class ProfileFragment : Fragment() {
         }
 
         alertDialog.show()
+    }
+
+    fun signOut(){
+        binding.btnSignOut.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            Toast.makeText(context, "Çıkış yapıldı", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_profileFragment_to_signInFragment)
+
+            activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.menu?.getItem(0)?.isChecked = true
+        }
+    }
+
+    fun photoGmailUser(){
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        currentUser?.let {
+            val photoUrl = it.photoUrl
+            photoUrl?.let { url ->
+                Glide.with(this)
+                    .load(url)
+                    .placeholder(R.drawable.user)
+                    .error(R.drawable.mavilogo)
+                    .transform(CircleCrop())
+                    .into(binding.imgProfilePicture)
+            }
+        }
     }
 }
