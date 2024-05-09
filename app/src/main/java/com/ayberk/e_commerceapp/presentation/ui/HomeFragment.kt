@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import com.ayberk.e_commerceapp.common.Resource
+import com.ayberk.e_commerceapp.common.gone
 import com.ayberk.e_commerceapp.common.showSnackbar
+import com.ayberk.e_commerceapp.common.visible
 import com.ayberk.e_commerceapp.data.model.Products
 import com.ayberk.e_commerceapp.databinding.FragmentHomeBinding
 import com.ayberk.e_commerceapp.presentation.adapter.ProductsAdapter
@@ -79,6 +81,7 @@ class HomeFragment : Fragment() {
                 saleProducts.observe(viewLifecycleOwner) {
                     when (it) {
                         is Resource.Success -> {
+                            progressbar.gone()
                             saleProductsAdapter.updateList(it.data)
                             val compositePageTransformer = CompositePageTransformer()
                             compositePageTransformer.addTransformer { page, position ->
@@ -98,9 +101,10 @@ class HomeFragment : Fragment() {
                         }
 
                         is Resource.Error -> {
+                            progressbar.gone()
                             requireView().showSnackbar(it.throwable.toString())
                         }
-
+                        Resource.Loading -> progressbar.visible()
                         else -> {}
                     }
                 }

@@ -31,7 +31,7 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private val productViewModel: ProductsViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
-
+    private val currentUser = FirebaseAuth.getInstance().currentUser
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -47,12 +47,12 @@ class ProfileFragment : Fragment() {
         binding.txtPasswordChange.setOnClickListener {
             showChangePasswordDialog()
         }
+
         photoGmailUser()
         signOut()
 
         with(binding) {
             with(productViewModel) {
-
                 user.observe(viewLifecycleOwner) {
                     when (it) {
                         is Resource.Success -> {
@@ -76,10 +76,8 @@ class ProfileFragment : Fragment() {
 
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
 
-        val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
-
         alertDialogBuilder.setView(dialogView)
-        alertDialogBuilder.setTitle(currentUserEmail)
+        alertDialogBuilder.setTitle(currentUser?.email)
 
         val alertDialog = alertDialogBuilder.create()
 
@@ -116,7 +114,6 @@ class ProfileFragment : Fragment() {
     }
 
     fun photoGmailUser(){
-        val currentUser = FirebaseAuth.getInstance().currentUser
         currentUser?.let {
             val photoUrl = it.photoUrl
             photoUrl?.let { url ->
@@ -130,3 +127,5 @@ class ProfileFragment : Fragment() {
         }
     }
 }
+
+

@@ -8,15 +8,15 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_out"
-        android:layout_width="181dp"
-        android:layout_height="72dp"
-        android:layout_marginTop="68dp"
+        android:layout_width="174dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="80dp"
         android:backgroundTint="@color/blue"
         android:text="@string/SignOut"
         android:textAllCaps="false"
         app:icon="@drawable/ic_sign_out"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtPasswordChange" />
 
