@@ -7,6 +7,7 @@ import com.ayberk.e_commerceapp.R
 import com.ayberk.e_commerceapp.data.model.Products
 import com.ayberk.e_commerceapp.databinding.ItemProductsBinding
 import com.bumptech.glide.Glide
+import java.text.DecimalFormat
 
 class ProductsAdapter : RecyclerView.Adapter<ProductsAdapter.RocketViewHolder>() {
 
@@ -31,16 +32,22 @@ class ProductsAdapter : RecyclerView.Adapter<ProductsAdapter.RocketViewHolder>()
 
         fun bind(product: Products) {
             binding.apply {
-                txtProductTitle.text = product.title
-                txtProductPrice.text = product.price.toString()
 
-                 Glide.with(imgProduct.context)
+                val price = product.price
+
+                val df = DecimalFormat("#.000 ₺")
+                val formattedPrice = df.format(price)
+
+                txtProductTitle.text = product.title
+                txtProductPrice.text = formattedPrice
+
+                 Glide.with(imgProduct.rootView)
                      .load(product.imageOne)
                      .error(R.drawable.mavilogo)
                      .centerCrop()
                      .into(imgProduct)
 
-                if (product.rate > 4){
+                if (product.rate!! > 4){
                     imgRate.setImageResource(R.drawable.star)
                 }
                 else {

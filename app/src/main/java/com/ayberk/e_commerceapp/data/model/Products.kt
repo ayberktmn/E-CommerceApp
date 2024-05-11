@@ -16,37 +16,37 @@ data class Products(
     val id: Int,
 
     @ColumnInfo(name = "category")
-    val category: String,
+    val category: String?,
 
     @ColumnInfo(name = "count")
-    val count: Int,
+    val count: Int?,
 
     @ColumnInfo(name = "description")
-    val description: String,
+    val description: String?,
 
     @ColumnInfo(name = "image")
-    val imageOne: String,
+    val imageOne: String?,
 
     @SerializedName("image_two")
     @ColumnInfo(name = "image_two")
-    val imageTwo: String,
+    val imageTwo: String?,
 
     @SerializedName("image_three")
     @ColumnInfo(name = "image_three")
-    val imageThree: String,
+    val imageThree: String?,
 
     @ColumnInfo(name = "price")
-    val price: Double,
+    val price: Double?,
 
     @ColumnInfo(name = "rate")
-    val rate: Double,
+    val rate: Double?,
 
     @ColumnInfo(name = "title")
-    val title: String,
+    val title: String?,
 
     @SerializedName("sale_state")
     @ColumnInfo(name = "sale_state")
-    val saleState: Int,
+    val saleState: Int?,
 
     @ColumnInfo(name = "is_favorite")
     val isFavorite: Boolean = false,

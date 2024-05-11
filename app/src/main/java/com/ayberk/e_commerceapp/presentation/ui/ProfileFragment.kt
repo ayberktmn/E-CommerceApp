@@ -23,6 +23,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,7 +46,17 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.txtPasswordChange.setOnClickListener {
-            showChangePasswordDialog()
+            currentUser?.providerData?.let { providers ->
+                if (providers.any { it.providerId == GoogleAuthProvider.PROVIDER_ID }) {
+                    // Google ile oturum açılmış, şifre değiştirme işlevini engelle
+                    // Burada gerekirse bir uyarı gösterebilirsiniz, örneğin Toast mesajıyla
+                    // veya hiçbir şey yapmadan sessizce devam edebilirsiniz
+                    Toast.makeText(requireContext(),"Google hesabında şifre değişikliği yapılamaz!",Toast.LENGTH_SHORT).show()
+                } else {
+                    // Diğer durumlarda (örneğin e-posta ve şifreyle oturum açılmışsa) şifre değiştirme işlevini göster
+                    showChangePasswordDialog()
+                }
+            }
         }
 
         photoGmailUser()
