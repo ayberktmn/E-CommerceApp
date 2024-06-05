@@ -1,13 +1,21 @@
 package com.ayberk.e_commerceapp.di.module
 
+import android.content.Context
+import androidx.room.Room
 import com.ayberk.e_commerceapp.common.Constans.BASE_URL
+import com.ayberk.e_commerceapp.data.source.FavoriteDao
+import com.ayberk.e_commerceapp.data.source.FavoritesRoomDB
 import com.ayberk.e_commerceapp.domain.retrofit.Authenticator
+import com.ayberk.e_commerceapp.domain.retrofit.RetrofitRep
 import com.ayberk.e_commerceapp.domain.retrofit.RetrofitServiceIns
+import com.ayberk.e_commerceapp.domain.usecase.UpsertBagProducts
+import com.ayberk.e_commerceapp.domain.usecase.event.BagEvent
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -68,4 +76,23 @@ class AppModule {
     @Singleton
     fun provideCoroutineContext(): CoroutineContext = Dispatchers.IO
 
+    @Provides
+    fun provideBagRoomDAO(bagRoomDB: FavoritesRoomDB): FavoriteDao {
+        return bagRoomDB.productFavoriteDAO()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRoomDatabase(@ApplicationContext context: Context): FavoritesRoomDB {
+        return Room.databaseBuilder(
+            context,
+            FavoritesRoomDB::class.java,
+            "bagdatabase.db"
+        ).build()
+    }
+
+    @Provides
+    fun provideUpsertRocket(retrofitRepository: RetrofitRep): UpsertBagProducts {
+        return UpsertBagProducts(retrofitRepository)
+    }
 }

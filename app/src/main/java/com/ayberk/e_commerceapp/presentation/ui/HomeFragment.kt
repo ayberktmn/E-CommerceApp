@@ -17,12 +17,15 @@ import com.ayberk.e_commerceapp.common.gone
 import com.ayberk.e_commerceapp.common.showSnackbar
 import com.ayberk.e_commerceapp.common.visible
 import com.ayberk.e_commerceapp.data.model.Products
+import com.ayberk.e_commerceapp.data.source.FavoriteDao
 import com.ayberk.e_commerceapp.databinding.FragmentHomeBinding
+import com.ayberk.e_commerceapp.domain.usecase.event.BagEvent
 import com.ayberk.e_commerceapp.presentation.adapter.ProductsAdapter
 import com.ayberk.e_commerceapp.presentation.adapter.SaleProductsAdapter
 import com.ayberk.e_commerceapp.presentation.viewmodel.ProductsViewModel
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.math.abs
 
 @AndroidEntryPoint
@@ -35,6 +38,9 @@ class HomeFragment : Fragment() {
     private val productViewModel: ProductsViewModel by viewModels()
 
     private val saleProductsAdapter by lazy { SaleProductsAdapter() }
+
+    @Inject
+    lateinit var favoriteDao: FavoriteDao
 
 
     override fun onCreateView(
@@ -127,11 +133,25 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView(productsList: List<Products>) {
         binding.rcrylerProducts.layoutManager = GridLayoutManager(requireContext(), 2)
-        productsAdapter = ProductsAdapter()
+
+        productsAdapter = ProductsAdapter(
+            event = { bagEvent ->
+                val result = productViewModel.onEvent(bagEvent)
+                productViewModel.productAddedToCart.observe(viewLifecycleOwner) { addedToCart ->
+                    if (addedToCart) {
+                        Toast.makeText(requireContext(), "Ürün sepete eklendi", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(requireContext(), "Ürün sepete eklenemedi!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            },
+            dataDao = favoriteDao
+        )
 
         productsAdapter.setProductsList(productsList)
 
         binding.rcrylerProducts.adapter = productsAdapter
+        binding.rcrylerProducts.setHasFixedSize(true)
     }
 
     override fun onDestroyView() {
