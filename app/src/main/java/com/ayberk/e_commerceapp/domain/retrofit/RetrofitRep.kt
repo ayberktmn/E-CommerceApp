@@ -32,4 +32,15 @@ class RetrofitRep @Inject constructor(
         }
     }
 
+    suspend fun clearRoom() {
+        withContext(Dispatchers.IO) {
+            spaceRoomDB.productFavoriteDAO().clearBags()
+        }
+    }
+
+    suspend fun deletefavoriteitem(deleteRocket: FavoriteProducts) {
+        withContext(Dispatchers.IO) {
+            spaceRoomDB.productFavoriteDAO().deleteFavorite(deleteRocket)
+        }
+    }
 }

@@ -57,9 +57,9 @@ class BagAdapter() : RecyclerView.Adapter<BagAdapter.BagFavoriteViewHolder>() {
                     .centerCrop()
                     .into(imgBagFavorite)
 
-             //   imgDelete.setOnClickListener {
-               //     onDeleteClickListener?.invoke(rocketFav)
-               // }
+                 imgClearFavorite.setOnClickListener {
+                   onDeleteClickListener?.invoke(bagproducts)
+               }
             }
         }
     }

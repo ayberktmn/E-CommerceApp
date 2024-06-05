@@ -22,7 +22,7 @@ class BagViewModel @Inject constructor(
 
     private val _favoriteBagLiveData = MutableLiveData<List<FavoriteProducts>>()
     val favoriteBagLiveData: LiveData<List<FavoriteProducts>> = _favoriteBagLiveData
-    var onRocketListEmpty: (() -> Unit)? = null
+    var onFavoriteBagListEmpty: (() -> Unit)? = null
 
     init {
         getAllFavoriteRockets()
@@ -40,16 +40,16 @@ class BagViewModel @Inject constructor(
     fun clearRoomIfNotEmpty() {
         if (favoriteBagLiveData.value?.isNotEmpty() == true) {
             viewModelScope.launch {
-              //  bagUseCases.clearRoom()
+                bagUseCases.clearRoom()
             }
         } else {
-            onRocketListEmpty?.invoke() // Liste boşsa callback'i çağır
+            onFavoriteBagListEmpty?.invoke() // Liste boşsa callback'i çağır
         }
     }
 
-    fun deleteRockets(rockets: FavoriteProducts) {
+    fun deleteFavItem(favitem: FavoriteProducts) {
         viewModelScope.launch {
-          //  bagUseCases.deleteRockets(rockets)
+            bagUseCases.deleteFavoriteItem(favitem)
         }
     }
 }

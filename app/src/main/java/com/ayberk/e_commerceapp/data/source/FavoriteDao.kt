@@ -22,7 +22,7 @@ interface FavoriteDao {
     fun deleteFavorite(bag: FavoriteProducts)
 
     @Query("DELETE FROM favorites")
-    fun clearRockets()
+    fun clearBags()
 
 
     @Query("SELECT COUNT(*) FROM favorites WHERE id = :id")

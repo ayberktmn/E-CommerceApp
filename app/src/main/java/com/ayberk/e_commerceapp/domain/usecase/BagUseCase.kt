@@ -7,4 +7,6 @@ import javax.inject.Inject
 @ViewModelScoped
 data class BagUseCase @Inject constructor(
     val upsertDeleteBag: UpsertBagProducts,
+    val clearRoom: ClearRoom,
+    val deleteFavoriteItem: DeleteFavoriteItem,
 )
