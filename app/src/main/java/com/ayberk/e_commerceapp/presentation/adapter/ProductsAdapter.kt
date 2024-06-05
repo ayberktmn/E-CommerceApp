@@ -19,7 +19,7 @@ class ProductsAdapter(
     private val dataDao: FavoriteDao
 ) : RecyclerView.Adapter<ProductsAdapter.RocketViewHolder>() {
 
-    private var productsList: List<Products> = emptyList()
+    private var productsList: List<Products>? =  null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RocketViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -28,11 +28,16 @@ class ProductsAdapter(
     }
 
     override fun onBindViewHolder(holder: RocketViewHolder, position: Int) {
-        holder.bind(productsList[position])
+        productsList?.let { bagfavitem ->
+            if (bagfavitem.isNotEmpty()) {
+                val bagfavitem = bagfavitem[position]
+                holder.bind(bagfavitem)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
-        return productsList.size
+        return productsList?.size ?: 0
     }
 
     inner class RocketViewHolder(private val binding: ItemProductsBinding) :
@@ -86,12 +91,9 @@ class ProductsAdapter(
                         rate = rate,
                         title = title,
                         isFavorite = isFavorite,
-                        salePrice = salePrice
+                        salePrice = salePrice,
                     )
-
-
                     event(BagEvent.UpsertDeleteBag(newProduct))
-
                 }
             }
         }

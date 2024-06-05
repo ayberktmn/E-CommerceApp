@@ -17,7 +17,7 @@ data class FavoriteProducts(
     @ColumnInfo(name = "description")
     val description: String?,
 
-    @ColumnInfo(name = "image_one") // imageOne -> image_one olarak değiştirildi
+    @ColumnInfo(name = "image_one")
     val imageOne: String?,
 
     @ColumnInfo(name = "image_two")
@@ -38,6 +38,6 @@ data class FavoriteProducts(
     @ColumnInfo(name = "is_favorite")
     val isFavorite: Boolean = false,
 
-    @ColumnInfo(name = "sale_price") // salePrice -> sale_price olarak değiştirildi
-    val salePrice: Double? // salePrice tipi Double olarak belirtildi
+    @ColumnInfo(name = "sale_price")
+    val salePrice: Double?,
 ): Parcelable

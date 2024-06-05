@@ -61,8 +61,8 @@ class BagFragment : Fragment() {
     }
 
     private fun initObservers() {
-        viewModelfav.favoriteBagLiveData.observe(viewLifecycleOwner) { rockets ->
-            rockets?.let {
+        viewModelfav.favoriteBagLiveData.observe(viewLifecycleOwner) { favItem ->
+            favItem?.let {
                 BagfavoriteAdapter.updateList(it)
             }
         }
